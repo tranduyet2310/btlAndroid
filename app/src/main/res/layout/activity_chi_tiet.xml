@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Activities.ChiTietActivity">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toobar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/g_blue"
+        app:layout_constraintTop_toTopOf="parent"
+        app:title="@string/chi_tiet_san_pham"
+        app:titleTextColor="@color/white">
+
+        <FrameLayout
+            android:id="@+id/framegiohang"
+            android:layout_width="55dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:layout_marginEnd="10dp">
+
+            <com.nex3z.notificationbadge.NotificationBadge
+                android:id="@+id/menu_sl"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:layout_gravity="top|right" />
+
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginTop="15dp"
+                android:src="@drawable/ic_cart" />
+        </FrameLayout>
+    </androidx.appcompat.widget.Toolbar>
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:fillViewport="true"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/toobar">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardProductImages"
+                android:layout_width="0dp"
+                android:layout_height="250dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="10dp"
+                app:cardCornerRadius="15dp"
+                app:cardElevation="0dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <ImageView
+                    android:id="@+id/imgchitiet"
+                    android:src="@drawable/ic_person"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+
+            </androidx.cardview.widget.CardView>
+
+            <LinearLayout
+                android:id="@+id/linearTitlePrice"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginEnd="10dp"
+                android:orientation="horizontal"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/cardProductImages">
+
+                <TextView
+                    android:id="@+id/txttensp"
+                    style="@style/h3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:maxLines="1"
+                    android:text="Tên sản phẩm"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/txtgiasp"
+                style="@style/h3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="$6000"
+                android:textColor="@color/g_gray700"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="@id/linearTitlePrice"
+                app:layout_constraintTop_toBottomOf="@id/linearTitlePrice" />
+
+            <View
+                android:id="@+id/topLine"
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginEnd="10dp"
+                android:background="@color/g_line"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/txtgiasp" />
+
+            <LinearLayout
+                android:id="@+id/linearProductPref"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:orientation="vertical"
+                app:layout_constraintEnd_toEndOf="@id/topLine"
+                app:layout_constraintStart_toStartOf="@id/topLine"
+                app:layout_constraintTop_toBottomOf="@id/topLine">
+
+                <TextView
+                    style="@style/h2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/mo_ta_chi_tiet_san_pham"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <ScrollView
+                    android:layout_width="match_parent"
+                    android:layout_height="100dp">
+
+                    <TextView
+                        android:id="@+id/txtmotachitiet"
+                        style="@style/h2"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:textSize="14sp"
+                        tools:text="Thông tin về sản phẩm" />
+                </ScrollView>
+
+
+            </LinearLayout>
+
+            <Spinner
+                android:id="@+id/spinner"
+                android:layout_width="match_parent"
+                android:layout_height="32dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginEnd="20dp"
+                android:background="@drawable/spinner"
+                android:gravity="center"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/linearProductPref" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btnthemvaogiohang"
+                style="@style/blueButtonStyle"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/mediumButtonHeight"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:text="Thêm vào giỏ hàng"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="@id/linearProductPref"
+                app:layout_constraintStart_toStartOf="@id/linearProductPref"
+                app:layout_constraintTop_toBottomOf="@id/spinner"
+                app:spinning_bar_color="@color/white" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

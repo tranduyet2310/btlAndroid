@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/mnu_trangchu"
+        android:icon="@drawable/ic_home_24"
+        android:title="Trang chủ" />
+    <item
+        android:id="@+id/mnu_quanao"
+        android:icon="@drawable/ic_shirt"
+        android:title="Quần Áo" />
+    <item
+        android:id="@+id/mnu_phukien"
+        android:icon="@drawable/ic_diamond"
+        android:title="Phụ kiện" />
+    <item
+        android:id="@+id/mnu_donhang"
+        android:icon="@drawable/ic_cart"
+        android:title="Đơn hàng" />
+    <item
+        android:id="@+id/mnu_thongtin"
+        android:icon="@drawable/ic_about_24"
+        android:title="Thông tin" />
+    <item
+        android:id="@+id/mnu_quanli"
+        android:title="Quản Lí"
+        android:icon="@drawable/ic_manage"/>
+    <item
+        android:id="@+id/mnu_thongke"
+        android:icon="@drawable/ic_chart_24"
+        android:title="Thống kê" />
+
+    <item android:title="">
+        <menu>
+            <item
+                android:id="@+id/mnu_dangxuat"
+                android:icon="@drawable/ic_logout_24"
+                android:title="Đăng xuất" />
+        </menu>
+    </item>
+</menu>

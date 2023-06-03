@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "1025560208936",
+    "project_id": "btlandr-da6ea",
+    "storage_bucket": "btlandr-da6ea.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1025560208936:android:b7f6f9acc82228b541b71d",
+        "android_client_info": {
+          "package_name": "com.example.beginagain"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1025560208936-tpmnbm2vu53himd15u3ai3t2cnuce3gf.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDMV48RFwaEfCpG0-6E3CFKgTmDczdnM2A"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1025560208936-tpmnbm2vu53himd15u3ai3t2cnuce3gf.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

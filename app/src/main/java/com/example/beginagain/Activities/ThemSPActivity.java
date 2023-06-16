@@ -167,7 +167,7 @@ public class ThemSPActivity extends AppCompatActivity {
                 TextUtils.isEmpty(str_hinhanh) || TextUtils.isEmpty(str_mota) || loai == 0) {
             Toast.makeText(this, "Vui lòng nhập đủ thông tin!", Toast.LENGTH_SHORT).show();
         } else {
-            ApiShop.getApiShop.insertSp(str_ten, str_gia, str_hinhanh, str_mota, (loai - 1))
+            ApiShop.getApiShop.insertSp(str_ten, str_gia, str_hinhanh, str_mota, loai)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(new Observer<MessageModels>() {
@@ -236,7 +236,7 @@ public class ThemSPActivity extends AppCompatActivity {
                 MessageModels serverRespone = response.body();
                 if (serverRespone != null) {
                     if (serverRespone.isSuccess()) {
-                        hinhAnh.setText(serverRespone.getName());
+                        hinhAnh.setText(serverRespone.getName()+"");
                     } else {
                         Log.d("Response", serverRespone.toString());
                     }
@@ -245,9 +245,11 @@ public class ThemSPActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<MessageModels> call, Throwable t) {
-                Log.d("log", t.getMessage());
+                Log.d("log", "uploadMultipleFiles "+t.getMessage());
             }
         });
+
+
     }
 
     private String getPath(Uri uri) {

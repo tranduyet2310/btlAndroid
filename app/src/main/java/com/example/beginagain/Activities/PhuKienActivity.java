@@ -61,10 +61,15 @@ public class PhuKienActivity extends AppCompatActivity {
             @Override
             public void onScrolled(@androidx.annotation.NonNull RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
-                if (isLoading = false) {
-                    if (linearLayoutManager.findFirstCompletelyVisibleItemPosition() == sanPhamMoiList.size() - 1) {
+                if (!isLoading) {
+                    LinearLayoutManager linearLayoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
+                    int lastVisibleItemPosition = linearLayoutManager.findLastVisibleItemPosition();
+                    int totalItemCount = linearLayoutManager.getItemCount();
+
+                    if (lastVisibleItemPosition == totalItemCount - 1) {
                         isLoading = true;
                         loadMore();
+                        //Toast.makeText(PhuKienActivity.this, "LoadMore()", Toast.LENGTH_SHORT).show();
                     }
                 }
             }

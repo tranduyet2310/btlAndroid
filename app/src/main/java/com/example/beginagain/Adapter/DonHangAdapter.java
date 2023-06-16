@@ -53,7 +53,8 @@ public class DonHangAdapter extends RecyclerView.Adapter<DonHangAdapter.ItemView
             @Override
             public void onClick(View view, int pos, boolean isLongClick) {
                 if(isLongClick){
-                    EventBus.getDefault().postSticky(new DonHangEvent(donHang));
+                    //EventBus.getDefault().postSticky(new DonHangEvent(donHang));
+                    EventBus.getDefault().post(new DonHangEvent(donHang));
                 }
             }
         });

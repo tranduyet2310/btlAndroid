@@ -98,7 +98,16 @@ public class ChiTietActivity extends AppCompatActivity {
         sanPhamMoi = (SanPhamMoi) getIntent().getSerializableExtra("chitiet");
         tenSp.setText(sanPhamMoi.getTensp());
         moTa.setText(sanPhamMoi.getMota());
-        Glide.with(getApplicationContext()).load(sanPhamMoi.getHinhanh()).into(imgHinhAnh);
+        //Glide.with(getApplicationContext()).load(sanPhamMoi.getHinhanh()).into(imgHinhAnh);
+
+        if(sanPhamMoi.getHinhanh().contains("http")){
+            Glide.with(getApplicationContext()).load(sanPhamMoi.getHinhanh())
+                    .into(imgHinhAnh);
+        }else{
+            String img = Utils.BASE_URL+"images/"+sanPhamMoi.getHinhanh();
+            Glide.with(getApplicationContext()).load(img).into(imgHinhAnh);
+        }
+
         DecimalFormat decimalFormat = new DecimalFormat("###,###,###");
         giaSp.setText("Giá: " + decimalFormat.format(Double.parseDouble(sanPhamMoi.getGiasp())) + "đ");
         Integer[] so = new Integer[]{1, 2, 3, 4, 5, 6, 7, 8, 9, 10};

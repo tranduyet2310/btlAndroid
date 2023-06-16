@@ -121,7 +121,7 @@ public class SanPhamTotAdapter extends RecyclerView.Adapter<SanPhamTotAdapter.It
         return list.size();
     }
 
-    public class ItemViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnCreateContextMenuListener, View.OnLongClickListener {
+    public class ItemViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
 
         private TextView txtGiaSp, txtTenSp;
         private ImageView imgHinhAnh;
@@ -136,7 +136,6 @@ public class SanPhamTotAdapter extends RecyclerView.Adapter<SanPhamTotAdapter.It
             btnThem = itemView.findViewById(R.id.btn_add_to_cart);
 
             itemView.setOnClickListener(this);
-            itemView.setOnCreateContextMenuListener(this);
             itemView.setOnLongClickListener(this);
 
         }
@@ -148,12 +147,6 @@ public class SanPhamTotAdapter extends RecyclerView.Adapter<SanPhamTotAdapter.It
         @Override
         public void onClick(View view) {
             itemClickListener.onClick(view, getAdapterPosition(), false);
-        }
-
-        @Override
-        public void onCreateContextMenu(ContextMenu contextMenu, View view, ContextMenu.ContextMenuInfo contextMenuInfo) {
-            contextMenu.add(0, 0, getAdapterPosition(), "Sửa");
-            contextMenu.add(0, 1, getAdapterPosition(), "Xóa");
         }
 
         @Override

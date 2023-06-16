@@ -9,6 +9,7 @@ import com.example.beginagain.R;
 import com.example.beginagain.Retrofit.ApiShop;
 import com.example.beginagain.Utils.Utils;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -63,8 +64,15 @@ public class ThanhToanActivity extends AppCompatActivity {
                     String str_email = Utils.user_current.getEmail();
                     String str_sdt = Utils.user_current.getMobile();
                     int id = Utils.user_current.getId();
-                    Log.d("test", new Gson().toJson(Utils.mangmuahang));
-                    ApiShop.getApiShop.createOrder(str_email, str_sdt, String.valueOf(tongTien), id, str_diachi, totalItem, new Gson().toJson(Utils.mangmuahang))
+
+                    GsonBuilder gsonBuilder = new GsonBuilder();
+                    Gson gson = gsonBuilder.setLenient().create();
+                    String str_chi_tiet = gson.toJson(Utils.mangmuahang);
+
+                    //Log.d("test", new Gson().toJson(Utils.mangmuahang));
+                    //new Gson().toJson(Utils.mangmuahang)
+                    Log.d("test", str_chi_tiet);
+                    ApiShop.getApiShop.createOrder(str_email, str_sdt, String.valueOf(tongTien), id, str_diachi, totalItem, str_chi_tiet)
                             .subscribeOn(Schedulers.io())
                             .observeOn(AndroidSchedulers.mainThread())
                             .subscribe(new Observer<UserModel>() {

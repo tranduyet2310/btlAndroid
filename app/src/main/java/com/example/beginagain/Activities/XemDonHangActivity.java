@@ -22,6 +22,8 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -118,11 +120,22 @@ public class XemDonHangActivity extends AppCompatActivity {
     protected void onStop() {
         super.onStop();
         EventBus.getDefault().unregister(this);
+//        donHang = null;
+//        Toast.makeText(this, "onStop", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        EventBus.getDefault().unregister(this);
+//        donHang = null;
+//        Toast.makeText(this, "onPause", Toast.LENGTH_SHORT).show();
     }
 
     @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
     public void eventDonHang(DonHangEvent event){
         if(event != null){
+            //Toast.makeText(this, "Event luôn", Toast.LENGTH_SHORT).show();
             donHang = event.getDonHang();
             showCustomDialog();
         }
@@ -133,6 +146,14 @@ public class XemDonHangActivity extends AppCompatActivity {
         View view = inflater.inflate(R.layout.dialog_don_hang, null);
         Spinner spinner = view.findViewById(R.id.spinner_dialog);
         AppCompatButton btnDongY = view.findViewById(R.id.dongy_dialog);
+        TextView tvIdUserDh = view.findViewById(R.id.tvIdUserDh);
+        TextView tvDiaChiDh = view.findViewById(R.id.tvDiaChiDh);
+        TextView tvSdtDh = view.findViewById(R.id.tvSdtDh);
+
+        tvIdUserDh.setText(donHang.getIdUser()+"");
+        tvDiaChiDh.setText(donHang.getDiachi());
+        tvSdtDh.setText(donHang.getSodienthoai());
+
         List<String> list = new ArrayList<>();
         list.add("Đơn hàng đang được xử lí");
         list.add("Đơn hàng đã được chấp nhận");
@@ -142,7 +163,6 @@ public class XemDonHangActivity extends AppCompatActivity {
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, list);
         spinner.setAdapter(adapter);
         spinner.setSelection(donHang.getTrangthai());
-
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {

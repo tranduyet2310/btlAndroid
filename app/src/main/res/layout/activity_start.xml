@@ -46,9 +46,9 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/tvRightAddressMargin"
         android:gravity="center"
-        android:text="Nội dung gì đó"
+        android:text="Cửa hàng Thời trang \n&amp; Phụ Kiện"
         android:textAlignment="center"
-        android:textSize="35sp"
+        android:textSize="30sp"
         app:layout_constraintBottom_toBottomOf="@id/ellipse"
         app:layout_constraintEnd_toEndOf="@id/ellipse"
         app:layout_constraintHorizontal_bias="0.428"
@@ -66,8 +66,9 @@
         app:layout_constraintTop_toBottomOf="@id/tvRightAddressForShopping"
         android:textAlignment="center"
         android:gravity="center"
-        android:layout_marginTop="15dp"
-        android:text="Giới thiệu"
+        android:textSize="14dp"
+        android:layout_marginTop="13dp"
+        android:text="@string/diachi"
         />
 
     <ImageView

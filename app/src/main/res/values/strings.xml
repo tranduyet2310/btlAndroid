@@ -53,7 +53,7 @@
     <string name="mo_ta_sp">Mô tả sản phẩm</string>
     <string name="them">Thêm sản phẩm</string>
     <string name="xac_nhan_dh">Xác nhận</string>
-    <string name="trang_thai_don_hang">Trạng thái đơn hàng</string>
+    <string name="trang_thai_don_hang">Trạng thái đơn:</string>
     <string name="thanh_toan">Thanh toán</string>
     <string name="dat_hang">ĐẶT HÀNG</string>
     <string name="nhap_dia_chi_thanh_toan">Nhập địa chỉ giao hàng</string>
@@ -64,4 +64,5 @@
     <string name="tvEmail">admin@gmail.com</string>
     <string name="thong_ke">Thống kê</string>
     <string name="thong_tin">Thông tin liên hệ</string>
+    <string name="diachi">562 - Nguyễn Trãi, Q.Thanh Xuân, Hà Nội</string>
 </resources>

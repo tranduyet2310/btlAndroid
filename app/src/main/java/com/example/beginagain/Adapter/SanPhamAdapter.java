@@ -17,6 +17,7 @@ import com.example.beginagain.Activities.ChiTietActivity;
 import com.example.beginagain.Interface.ItemClickListener;
 import com.example.beginagain.Model.SanPhamMoi;
 import com.example.beginagain.R;
+import com.example.beginagain.Utils.Utils;
 
 import java.text.DecimalFormat;
 import java.util.List;
@@ -60,7 +61,17 @@ public class SanPhamAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             DecimalFormat decimalFormat = new DecimalFormat("###,###,###");
             itemViewHolder.giaSp.setText("Giá: "+decimalFormat.format(Double.parseDouble(sanPhamMoi.getGiasp()))+ "đ");
             itemViewHolder.moTa.setText(sanPhamMoi.getMota());
-            Glide.with(context).load(sanPhamMoi.getHinhanh()).into(itemViewHolder.hinhAnh);
+            //Glide.with(context).load(sanPhamMoi.getHinhanh()).into(itemViewHolder.hinhAnh);
+
+            if(sanPhamMoi.getHinhanh().contains("http")){
+                Glide.with(context).load(sanPhamMoi.getHinhanh())
+                        .into(itemViewHolder.hinhAnh);
+            }else{
+                String img = Utils.BASE_URL+"images/"+sanPhamMoi.getHinhanh();
+                Glide.with(context).load(img).into(itemViewHolder.hinhAnh);
+            }
+
+
             itemViewHolder.setItemClickListener(new ItemClickListener() {
                 @Override
                 public void onClick(View view, int pos, boolean isLongClick) {

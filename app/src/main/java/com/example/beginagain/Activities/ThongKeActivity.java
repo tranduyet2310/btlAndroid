@@ -3,6 +3,7 @@ package com.example.beginagain.Activities;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import com.example.beginagain.Model.ThongKe;
 import com.example.beginagain.Model.ThongKeModel;
 import com.example.beginagain.R;
 import com.example.beginagain.Retrofit.ApiShop;
@@ -18,9 +19,13 @@ import com.github.mikephil.charting.formatter.PercentFormatter;
 import com.github.mikephil.charting.utils.ColorTemplate;
 
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
+import android.widget.TableLayout;
+import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -40,6 +45,7 @@ public class ThongKeActivity extends AppCompatActivity {
     private Toolbar toolbar;
     private BarChart barChartDonHang;
     private PieChart pieChartSanPham;
+    private TableLayout tableLayout;
     private TextView tvTongDonHang, tvDonHangMoi, tvDonHangXuLy, tvDonHangGiao, tvDoanhThu;
     private Disposable disposable;
     private long tongDh, tongDhMoi, tongDhXuLy, tongDhGiao;
@@ -59,6 +65,93 @@ public class ThongKeActivity extends AppCompatActivity {
         // Ve bieu do
         getChartDonHang();
         getDataChart();
+        // Tao bang thong ke
+        createTableSp();
+    }
+
+    private void createTableSp() {
+        TableRow headerRow = new TableRow(this);
+        TableRow.LayoutParams layoutParams = new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.WRAP_CONTENT, 10);
+        layoutParams.setMargins(15, 5, 15, 5);
+        headerRow.setLayoutParams(layoutParams);
+
+        TableRow.LayoutParams rowFirstParams = new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT, 5);
+        rowFirstParams.setMargins(15,2,0,2);
+
+        TableRow.LayoutParams rowSecondParams = new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT, 5);
+        rowSecondParams.setMargins(0,2,15,2);
+
+        TextView headerName = new TextView(this);
+        headerName.setText("Tên sản phẩm");
+        headerName.setBackgroundColor(Color.parseColor("#B8D9FA"));
+        headerName.setGravity(Gravity.CENTER);
+        headerName.setTypeface(null, Typeface.BOLD);
+        headerName.setLayoutParams(rowFirstParams);
+        headerRow.addView(headerName);
+
+        TextView headerQuantity = new TextView(this);
+        headerQuantity.setText("Số lượng");
+        headerQuantity.setBackgroundColor(Color.parseColor("#E9EAEC"));
+        headerQuantity.setGravity(Gravity.CENTER);
+        headerQuantity.setTypeface(null, Typeface.BOLD);
+        headerQuantity.setLayoutParams(rowSecondParams);
+        headerRow.addView(headerQuantity);
+
+        tableLayout.addView(headerRow);
+
+        ApiShop.getApiShop.getThongKe()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<ThongKeModel>() {
+                    @Override
+                    public void onSubscribe(@NonNull Disposable d) {
+                        disposable = d;
+                    }
+
+                    @Override
+                    public void onNext(@NonNull ThongKeModel thongKeModel) {
+                        if(thongKeModel.isSuccess()){
+                            List<ThongKe> productList = thongKeModel.getResult();
+                            for (ThongKe product : productList){
+                                TableRow dataRow = new TableRow(ThongKeActivity.this);
+                                dataRow.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.WRAP_CONTENT, 10));
+
+                                TableRow.LayoutParams rowFirstParams = new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT, 5);
+                                rowFirstParams.setMargins(15,2,0,2);
+
+                                TableRow.LayoutParams rowSecondParams = new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT, 5);
+                                rowSecondParams.setMargins(0,2,15,2);
+
+                                TextView name = new TextView(ThongKeActivity.this);
+                                name.setText(product.getTensp());
+                                name.setBackgroundColor(Color.parseColor("#B8D9FA"));
+                                name.setGravity(Gravity.CENTER);
+                                name.setLayoutParams(rowFirstParams);
+                                dataRow.addView(name);
+
+                                TextView quantity = new TextView(ThongKeActivity.this);
+                                quantity.setText(String.valueOf(product.getTong()));
+                                quantity.setBackgroundColor(Color.parseColor("#E9EAEC"));
+                                quantity.setGravity(Gravity.CENTER);
+                                quantity.setLayoutParams(rowSecondParams);
+                                dataRow.addView(quantity);
+
+                                tableLayout.addView(dataRow);
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onError(@NonNull Throwable e) {
+                        Log.d(TAG, e.getMessage());
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        Log.d(TAG, "Lấy dữ liệu số lượng sản phẩm xong!");
+                    }
+                });
+
     }
 
     private void getChartDonHang() {
@@ -280,6 +373,7 @@ public class ThongKeActivity extends AppCompatActivity {
         toolbar = findViewById(R.id.toobar);
         barChartDonHang = findViewById(R.id.barchartDonHang);
         pieChartSanPham = findViewById(R.id.piechart);
+        tableLayout = findViewById(R.id.tableLayout);
         tvTongDonHang = findViewById(R.id.tvTongDonHang);
         tvDonHangMoi = findViewById(R.id.tvDonHangMoi);
         tvDonHangXuLy = findViewById(R.id.tvDonHangXuLy);

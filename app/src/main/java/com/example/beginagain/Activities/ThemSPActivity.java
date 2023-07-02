@@ -151,6 +151,7 @@ public class ThemSPActivity extends AppCompatActivity {
                         @Override
                         public void onComplete() {
                             Log.d("ThemSPActivity", "Sửa thành công");
+                            ThemSPActivity.this.finish();
                         }
                     });
         }
@@ -193,6 +194,7 @@ public class ThemSPActivity extends AppCompatActivity {
                         @Override
                         public void onComplete() {
                             Log.d("ThemSPActivity", "Thêm thành công");
+                            ThemSPActivity.this.finish();
                         }
                     });
         }

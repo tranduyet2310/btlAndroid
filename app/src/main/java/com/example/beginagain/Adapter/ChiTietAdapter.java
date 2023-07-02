@@ -42,8 +42,7 @@ public class ChiTietAdapter extends RecyclerView.Adapter<ChiTietAdapter.ItemView
         //Glide.with(context).load(item.getHinhanh()).into(holder.imageChiTiet);
 
         if(item.getHinhanh().contains("http")){
-            Glide.with(context).load(item.getHinhanh())
-                    .into(holder.imageChiTiet);
+            Glide.with(context).load(item.getHinhanh()).into(holder.imageChiTiet);
         }else{
             String img = Utils.BASE_URL+"images/"+item.getHinhanh();
             Glide.with(context).load(img).into(holder.imageChiTiet);

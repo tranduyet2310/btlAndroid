@@ -21,6 +21,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -42,6 +43,7 @@ public class XemDonHangActivity extends AppCompatActivity {
 
     private Toolbar toolbar;
     private RecyclerView rcvDonHang;
+    private ImageView imgDonHangTrong;
     private DonHang donHang;
     private AlertDialog dialog;
     private int tinhtrang;
@@ -68,7 +70,10 @@ public class XemDonHangActivity extends AppCompatActivity {
 
                     @Override
                     public void onNext(@NonNull DonHangModel donHangModel) {
-                        DonHangAdapter adapter = new DonHangAdapter(getApplicationContext(), donHangModel.getResult());
+                        List<DonHang> donHangList = donHangModel.getResult();
+
+
+                        DonHangAdapter adapter = new DonHangAdapter(getApplicationContext(), donHangList);
                         rcvDonHang.setAdapter(adapter);
                     }
 
@@ -97,6 +102,7 @@ public class XemDonHangActivity extends AppCompatActivity {
     }
 
     private void initView() {
+        imgDonHangTrong = findViewById(R.id.imgDonHangTrong);
         rcvDonHang = findViewById(R.id.recycleview_donhang);
         toolbar = findViewById(R.id.toobar);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
@@ -133,8 +139,8 @@ public class XemDonHangActivity extends AppCompatActivity {
     }
 
     @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
-    public void eventDonHang(DonHangEvent event){
-        if(event != null){
+    public void eventDonHang(DonHangEvent event) {
+        if (event != null) {
             //Toast.makeText(this, "Event luôn", Toast.LENGTH_SHORT).show();
             donHang = event.getDonHang();
             showCustomDialog();
@@ -150,7 +156,7 @@ public class XemDonHangActivity extends AppCompatActivity {
         TextView tvDiaChiDh = view.findViewById(R.id.tvDiaChiDh);
         TextView tvSdtDh = view.findViewById(R.id.tvSdtDh);
 
-        tvIdUserDh.setText(donHang.getIdUser()+"");
+        tvIdUserDh.setText(donHang.getIdUser() + "");
         tvDiaChiDh.setText(donHang.getDiachi());
         tvSdtDh.setText(donHang.getSodienthoai());
 
@@ -186,7 +192,6 @@ public class XemDonHangActivity extends AppCompatActivity {
         builder.setView(view);
         dialog = builder.create();
         dialog.show();
-
     }
 
     private void capNhatDonHang() {

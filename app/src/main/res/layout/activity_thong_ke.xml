@@ -187,7 +187,7 @@
             <LinearLayout
                 android:id="@+id/space_tk_san_pham"
                 android:layout_width="match_parent"
-                android:layout_height="350dp"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
                 android:orientation="vertical"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -202,10 +202,19 @@
                     android:text="Thống kế sản phẩm đã bán"
                     android:textStyle="bold" />
 
+                <TableLayout
+                    android:layout_margin="5dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/tableLayout">
+
+                </TableLayout>
+
                 <com.github.mikephil.charting.charts.PieChart
+                    android:layout_marginTop="10dp"
                     android:id="@+id/piechart"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="300dp"
                     android:layout_margin="5dp" />
 
             </LinearLayout>
@@ -213,4 +222,5 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.core.widget.NestedScrollView>
+
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

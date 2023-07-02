@@ -53,6 +53,7 @@ public class ThanhToanActivity extends AppCompatActivity {
         txtTongTien.setText(decimalFormat.format(tongTien));
         txtEmail.setText(Utils.user_current.getEmail());
         txtSdt.setText(Utils.user_current.getMobile());
+        edtDiaChi.setText(Utils.user_current.getDiachi());
 
         btnDatHang.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -69,7 +70,7 @@ public class ThanhToanActivity extends AppCompatActivity {
                     Gson gson = gsonBuilder.setLenient().create();
                     String str_chi_tiet = gson.toJson(Utils.mangmuahang);
 
-                    //Log.d("test", new Gson().toJson(Utils.mangmuahang));
+                    Log.d("test", new Gson().toJson(Utils.mangmuahang));
                     //new Gson().toJson(Utils.mangmuahang)
                     Log.d("test", str_chi_tiet);
                     ApiShop.getApiShop.createOrder(str_email, str_sdt, String.valueOf(tongTien), id, str_diachi, totalItem, str_chi_tiet)
@@ -83,20 +84,22 @@ public class ThanhToanActivity extends AppCompatActivity {
 
                                 @Override
                                 public void onNext(@NonNull UserModel userModel) {
-                                    Toast.makeText(getApplicationContext(), "Thành công", Toast.LENGTH_SHORT).show();
-                                    Utils.mangmuahang.clear();
+
                                 }
 
                                 @Override
                                 public void onError(@NonNull Throwable e) {
                                     Log.d("ThanhToanActivity", e.getMessage());
+                                    Toast.makeText(getApplicationContext(), "Thành công", Toast.LENGTH_SHORT).show();
+                                    Utils.mangmuahang.clear();
+                                    Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                                    startActivity(intent);
+                                    finish();
                                 }
 
                                 @Override
                                 public void onComplete() {
-                                    Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                                    startActivity(intent);
-                                    finish();
+
                                 }
                             });
                 }

@@ -1,6 +1,8 @@
 package com.example.beginagain.Activities;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.AppCompatButton;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -15,11 +17,13 @@ import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -38,6 +42,7 @@ import com.example.beginagain.Model.MessageModels;
 import com.example.beginagain.Model.SanPhamMoi;
 import com.example.beginagain.Model.SanPhamMoiModel;
 import com.example.beginagain.Model.User;
+import com.example.beginagain.Model.UserModel;
 import com.example.beginagain.R;
 import com.example.beginagain.Retrofit.ApiShop;
 import com.example.beginagain.Utils.Utils;
@@ -50,6 +55,7 @@ import com.nex3z.notificationbadge.NotificationBadge;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.hdodenhof.circleimageview.CircleImageView;
 import io.paperdb.Paper;
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.annotations.NonNull;
@@ -76,7 +82,9 @@ public class MainActivity extends AppCompatActivity {
     private List<LoaiSp> mangLoaiSp;
     //private ListView listViewTrangChinh;
     private TextView tvEmailAddress, tvUseNameCur;
+    private AlertDialog dialog;
     private LoaiSpAdapter loaiSpAdapter;
+    private CircleImageView circleImageView;
     private SanPhamMoiAdapter sanPhamMoiAdapter;
     private SanPhamTotAdapter sanPhamTotAdapter;
 
@@ -150,6 +158,92 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             }
         });
+        
+        circleImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showCustomDialog();
+            }
+        });
+        
+    }
+
+    private void showCustomDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        LayoutInflater inflater = getLayoutInflater();
+        View view = inflater.inflate(R.layout.dialog_thong_tin, null);
+        builder.setView(view);
+
+        AppCompatButton btnXacNhan = view.findViewById(R.id.btndangki);
+        ImageView imgClose = view.findViewById(R.id.imgClose);
+        EditText edtName = view.findViewById(R.id.username);
+        EditText edtEmail = view.findViewById(R.id.email);
+        EditText edtSdt = view.findViewById(R.id.mobile);
+        EditText edtAddress = view.findViewById(R.id.address);
+
+        edtName.setText(Utils.user_current.getUsername());
+        edtEmail.setText(Utils.user_current.getEmail());
+        edtSdt.setText(Utils.user_current.getMobile());
+        edtAddress.setText(Utils.user_current.getDiachi());
+
+        btnXacNhan.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String str_name = edtName.getText().toString().trim();
+                String str_email = edtEmail.getText().toString().trim();
+                String str_sdt = edtSdt.getText().toString().trim();
+                String str_address = edtAddress.getText().toString().trim();
+                int id = Utils.user_current.getId();
+
+                if (TextUtils.isEmpty(str_name)) {
+                    Toast.makeText(getApplicationContext(), "Vui lòng nhập Username", Toast.LENGTH_SHORT).show();
+                } else if (TextUtils.isEmpty(str_email)) {
+                    Toast.makeText(getApplicationContext(), "Vui lòng nhập Email", Toast.LENGTH_SHORT).show();
+                }else if (TextUtils.isEmpty(str_sdt)) {
+                    Toast.makeText(getApplicationContext(), "Vui lòng nhập SĐT", Toast.LENGTH_SHORT).show();
+                }else if (TextUtils.isEmpty(str_address)) {
+                    Toast.makeText(getApplicationContext(), "Vui lòng nhập địa chỉ", Toast.LENGTH_SHORT).show();
+                } else {
+                    apiShop.getApiShop.updateInfo(str_name, str_email, str_sdt, str_address, id)
+                            .subscribeOn(Schedulers.io())
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .subscribe(new Observer<UserModel>() {
+                                @Override
+                                public void onSubscribe(@NonNull Disposable d) {
+                                    disposable = d;
+                                }
+
+                                @Override
+                                public void onNext(@NonNull UserModel userModel) {
+
+                                }
+
+                                @Override
+                                public void onError(@NonNull Throwable e) {
+                                    Log.d(TAG, "Loi updateinfo "+e.getMessage());
+                                }
+
+                                @Override
+                                public void onComplete() {
+                                    Utils.user_current.setDiachi(str_address);
+                                    Toast.makeText(MainActivity.this, "Cập nhật thông tin thành công!", Toast.LENGTH_SHORT).show();
+                                    dialog.dismiss();
+                                }
+                            });
+                }
+            }
+        });
+
+        imgClose.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
+
+        builder.setCancelable(true);
+        dialog = builder.create();
+        dialog.show();
     }
 
     private void getSpTot() {
@@ -293,6 +387,7 @@ public class MainActivity extends AppCompatActivity {
 
         navigationView.setItemIconTintList(null);
         View headerView = navigationView.getHeaderView(0);
+        circleImageView = headerView.findViewById(R.id.profile_image);
         tvEmailAddress = headerView.findViewById(R.id.tvEmailAddress);
         tvUseNameCur = headerView.findViewById(R.id.tvUserNameCur);
         tvEmailAddress.setText(Utils.user_current.getEmail());

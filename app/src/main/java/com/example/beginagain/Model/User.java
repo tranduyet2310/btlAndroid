@@ -8,7 +8,7 @@ public class User {
     private String username;
     private String mobile;
     private String uid;
-    private String token;
+    private String diachi;
 
     public User() {
     }
@@ -61,11 +61,11 @@ public class User {
         this.uid = uid;
     }
 
-    public String getToken() {
-        return token;
+    public String getDiachi() {
+        return diachi;
     }
 
-    public void setToken(String token) {
-        this.token = token;
+    public void setDiachi(String diachi) {
+        this.diachi = diachi;
     }
 }

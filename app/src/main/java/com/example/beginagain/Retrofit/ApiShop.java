@@ -161,11 +161,14 @@ public interface ApiShop {
             @Field("token") String token
     );
 
-    @POST("gettoken.php")
+    @POST("updateinfo.php")
     @FormUrlEncoded
-    Observable<UserModel> getToken(
-            @Field("status") int status,
-            @Field("iduser") int iduser
+    Observable<UserModel> updateInfo(
+            @Field("username") String username,
+            @Field("email") String email,
+            @Field("mobile") String mobile,
+            @Field("diachi") String diachi,
+            @Field("id") int id
     );
 
 }

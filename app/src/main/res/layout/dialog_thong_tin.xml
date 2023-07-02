@@ -3,8 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".Activities.DangKiActivity">
+    android:layout_height="match_parent">
 
     <ImageView
         android:layout_width="match_parent"
@@ -12,14 +11,25 @@
         android:scaleType="centerCrop"
         android:src="@drawable/blury_background" />
 
+    <ImageView
+        android:id="@+id/imgClose"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_close"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="20dp"/>
+
     <TextView
         android:id="@+id/tvInfor"
         app:layout_constraintTop_toTopOf="parent"
         android:layout_marginTop="60dp"
-        android:text="@string/dang_ki"
+        android:text="Cập nhật thông tin"
         style="@style/h4"
         android:gravity="center"
         android:padding="5dp"
+        android:textSize="20sp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
     <com.google.android.material.textfield.TextInputLayout
@@ -70,13 +80,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/pass"
-            android:hint="@string/pass_dk"
+            android:id="@+id/mobile"
+            android:hint="@string/sdt_dk"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
             android:backgroundTint="@color/white"
-            android:inputType="textPassword"
-            android:drawableLeft="@drawable/ic_vpn_key"
+            android:inputType="number"
+            android:drawableLeft="@drawable/ic_mobile"
             android:drawablePadding="5dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
@@ -90,33 +100,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/repass"
-            android:hint="@string/re_pass_dk"
+            android:id="@+id/address"
+            android:hint="Địa chỉ"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
             android:backgroundTint="@color/white"
-            android:inputType="textPassword"
-            android:drawableLeft="@drawable/ic_vpn_key"
-            android:drawablePadding="5dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <com.google.android.material.textfield.TextInputLayout
-        app:layout_constraintTop_toBottomOf="@+id/line4"
-        android:layout_marginTop="5dp"
-        android:id="@+id/line5"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/mobile"
-            android:hint="@string/sdt_dk"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            android:backgroundTint="@color/white"
-            android:inputType="number"
-            android:drawableLeft="@drawable/ic_mobile"
+            android:inputType="text"
+            android:drawableLeft="@drawable/ic_location"
             android:drawablePadding="5dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
@@ -124,7 +114,7 @@
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btndangki"
-        app:layout_constraintTop_toBottomOf="@+id/line5"
+        app:layout_constraintTop_toBottomOf="@+id/line4"
         android:layout_marginRight="70dp"
         android:layout_marginLeft="70dp"
         android:layout_marginTop="20dp"
@@ -132,6 +122,5 @@
         style="@style/blueButtonStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

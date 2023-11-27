@@ -8,8 +8,8 @@ import java.util.List;
 
 public class Utils {
 
-    public static final String BASE_URL="http://172.20.10.2:8080/shop/";
-    public static final String WEB_URL = "http://172.20.10.2:8080/xinhstore/";
+    public static final String BASE_URL="http://172.20.10.3:8800/shop/";
+    public static final String WEB_URL = "http://172.20.10.3:8800/xinhstore/";
 
     public static List<GioHang> manggiohang;
 

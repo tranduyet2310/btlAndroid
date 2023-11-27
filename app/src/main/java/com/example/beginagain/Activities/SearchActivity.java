@@ -10,6 +10,7 @@ import com.example.beginagain.Model.SanPhamMoi;
 import com.example.beginagain.Model.SanPhamMoiModel;
 import com.example.beginagain.R;
 import com.example.beginagain.Retrofit.ApiShop;
+import com.example.beginagain.Retrofit.RetrofitService;
 
 import android.os.Bundle;
 import android.text.Editable;
@@ -33,6 +34,7 @@ public class SearchActivity extends AppCompatActivity {
     private EditText edtSearch;
     private RecyclerView recyclerView;
     private ApiShop apiShop;
+    private RetrofitService retrofitService;
     private Disposable disposable;
     private List<SanPhamMoi> sanPhamMoiList;
     private SanPhamAdapter sanPhamAdapter;
@@ -41,6 +43,10 @@ public class SearchActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
+
+        retrofitService = new RetrofitService();
+        apiShop = retrofitService.getRetrofit().create(ApiShop.class);
+
         initView();
         ActionToolbar();
     }
@@ -59,7 +65,7 @@ public class SearchActivity extends AppCompatActivity {
 
     private void getDataSearch(String s) {
         sanPhamMoiList.clear();
-        apiShop.getApiShop.search(s).subscribeOn(Schedulers.io())
+        apiShop.search(s).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<SanPhamMoiModel>() {
                     @Override

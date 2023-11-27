@@ -101,7 +101,6 @@ public class GioHangActivity extends AppCompatActivity {
     protected void onStop() {
         super.onStop();
         EventBus.getDefault().unregister(this);
-        //Utils.mangmuahang.clear();
     }
 
     @Override

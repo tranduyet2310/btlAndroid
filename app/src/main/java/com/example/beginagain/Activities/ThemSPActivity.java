@@ -23,6 +23,7 @@ import com.example.beginagain.Model.MessageModels;
 import com.example.beginagain.Model.SanPhamMoi;
 import com.example.beginagain.R;
 import com.example.beginagain.Retrofit.ApiShop;
+import com.example.beginagain.Retrofit.RetrofitService;
 import com.github.dhaval2404.imagepicker.ImagePicker;
 import com.google.android.material.textfield.TextInputEditText;
 
@@ -55,11 +56,15 @@ public class ThemSPActivity extends AppCompatActivity {
     private boolean flag = false;
     private int loai = 0;
     private String mediaPath;
+    private ApiShop apiShop;
+    private RetrofitService retrofitService;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_them_sp);
+        retrofitService = new RetrofitService();
+        apiShop = retrofitService.getRetrofit().create(ApiShop.class);
         initView();
         ActionToolbar();
         initControl();
@@ -125,7 +130,7 @@ public class ThemSPActivity extends AppCompatActivity {
                 TextUtils.isEmpty(str_hinhanh) || TextUtils.isEmpty(str_mota) || loai == 0) {
             Toast.makeText(this, "Vui lòng nhập đủ thông tin!", Toast.LENGTH_SHORT).show();
         } else {
-            ApiShop.getApiShop.updateSp(str_ten, str_gia, str_hinhanh, str_mota, loai, sanPhamSua.getId())
+            apiShop.updateSp(str_ten, str_gia, str_hinhanh, str_mota, loai, sanPhamSua.getId())
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(new Observer<MessageModels>() {
@@ -168,7 +173,7 @@ public class ThemSPActivity extends AppCompatActivity {
                 TextUtils.isEmpty(str_hinhanh) || TextUtils.isEmpty(str_mota) || loai == 0) {
             Toast.makeText(this, "Vui lòng nhập đủ thông tin!", Toast.LENGTH_SHORT).show();
         } else {
-            ApiShop.getApiShop.insertSp(str_ten, str_gia, str_hinhanh, str_mota, loai)
+            apiShop.insertSp(str_ten, str_gia, str_hinhanh, str_mota, loai)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(new Observer<MessageModels>() {
@@ -231,7 +236,7 @@ public class ThemSPActivity extends AppCompatActivity {
         File file = new File(getPath(uri));
         RequestBody requestBody = RequestBody.create(MediaType.parse("*/*"), file);
         MultipartBody.Part fileToUpload = MultipartBody.Part.createFormData("file", file.getName(), requestBody);
-        Call<MessageModels> call = ApiShop.getApiShop.uploadFile(fileToUpload);
+        Call<MessageModels> call = apiShop.uploadFile(fileToUpload);
         call.enqueue(new Callback<MessageModels>() {
             @Override
             public void onResponse(Call<MessageModels> call, Response<MessageModels> response) {

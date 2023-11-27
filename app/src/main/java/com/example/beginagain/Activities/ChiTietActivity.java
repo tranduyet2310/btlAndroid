@@ -18,6 +18,8 @@ import com.bumptech.glide.Glide;
 import com.example.beginagain.Model.GioHang;
 import com.example.beginagain.Model.SanPhamMoi;
 import com.example.beginagain.R;
+import com.example.beginagain.Retrofit.ApiShop;
+import com.example.beginagain.Retrofit.RetrofitService;
 import com.example.beginagain.Utils.Utils;
 import com.nex3z.notificationbadge.NotificationBadge;
 
@@ -98,7 +100,6 @@ public class ChiTietActivity extends AppCompatActivity {
         sanPhamMoi = (SanPhamMoi) getIntent().getSerializableExtra("chitiet");
         tenSp.setText(sanPhamMoi.getTensp());
         moTa.setText(sanPhamMoi.getMota());
-        //Glide.with(getApplicationContext()).load(sanPhamMoi.getHinhanh()).into(imgHinhAnh);
 
         if(sanPhamMoi.getHinhanh().contains("http")){
             Glide.with(getApplicationContext()).load(sanPhamMoi.getHinhanh())

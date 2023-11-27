@@ -28,22 +28,6 @@ import retrofit2.http.Part;
 
 public interface ApiShop {
 
-    HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY);
-
-    OkHttpClient.Builder okBuilder = new OkHttpClient.Builder()
-            .readTimeout(30, TimeUnit.SECONDS)
-            .connectTimeout(30, TimeUnit.SECONDS)
-            .retryOnConnectionFailure(true)
-            .addInterceptor(loggingInterceptor);
-
-    ApiShop getApiShop = new Retrofit.Builder()
-            .baseUrl(Utils.BASE_URL)
-            .addConverterFactory(GsonConverterFactory.create())
-            .addCallAdapterFactory(RxJava3CallAdapterFactory.create())
-            .client(okBuilder.build())
-            .build()
-            .create(ApiShop.class);
-
     @GET("thongke.php")
     Observable<ThongKeModel> getThongKe();
 
@@ -55,6 +39,12 @@ public interface ApiShop {
     Observable<ThongKeModel> getThongKe2(
             @Field("loai") int trangthai
     );
+
+    @GET("thongke3.php")
+    Observable<ThongKeModel> getThongKe3();
+
+    @GET("thongke3.php")
+    Observable<ThongKeModel> getThongKe4();
 
     @GET("getloaisp.php")
     Observable<LoaiSpModel> getLoaiSp();

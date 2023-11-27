@@ -15,6 +15,7 @@ import android.widget.Toast;
 import com.example.beginagain.Model.UserModel;
 import com.example.beginagain.R;
 import com.example.beginagain.Retrofit.ApiShop;
+import com.example.beginagain.Retrofit.RetrofitService;
 import com.example.beginagain.Utils.Utils;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -37,6 +38,7 @@ public class DangNhapActivity extends AppCompatActivity {
     private FirebaseUser user;
     private AppCompatButton btnDangNhap;
     private ApiShop apiShop;
+    private RetrofitService retrofitService;
     private Disposable disposable;
     private boolean isLogin = false;
 
@@ -44,6 +46,10 @@ public class DangNhapActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dang_nhap);
+
+        retrofitService = new RetrofitService();
+        apiShop = retrofitService.getRetrofit().create(ApiShop.class);
+
         initView();
         initControl();
     }
@@ -101,7 +107,7 @@ public class DangNhapActivity extends AppCompatActivity {
 
     private void dangNhap(String email, String pass) {
 
-        ApiShop.getApiShop.dangNhap(email, pass)
+        apiShop.dangNhap(email, pass)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<UserModel>() {
@@ -166,7 +172,8 @@ public class DangNhapActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        disposable.dispose();
+        if (disposable != null)
+            disposable.dispose();
     }
 
     @Override

@@ -26,7 +26,7 @@
             <LinearLayout
                 android:id="@+id/space_tk_don_hang"
                 android:layout_width="match_parent"
-                android:layout_height="335dp"
+                android:layout_height="350dp"
                 android:orientation="vertical"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -59,7 +59,7 @@
                             android:background="@color/g_line"
                             android:gravity="center"
                             android:padding="5dp"
-                            android:text="20"
+                            tools:text="20"
                             android:textSize="15sp"
                             android:textStyle="bold" />
                     </TableRow>
@@ -86,7 +86,7 @@
                             android:background="@color/g_line"
                             android:gravity="center"
                             android:padding="5dp"
-                            android:text="20"
+                            tools:text="20"
                             android:textSize="15sp"
                             android:textStyle="bold" />
                     </TableRow>
@@ -113,7 +113,7 @@
                             android:background="@color/g_line"
                             android:gravity="center"
                             android:padding="5dp"
-                            android:text="20"
+                            tools:text="20"
                             android:textSize="15sp"
                             android:textStyle="bold" />
                     </TableRow>
@@ -127,7 +127,7 @@
                             android:layout_weight="1"
                             android:background="@color/g_blue100"
                             android:padding="5dp"
-                            android:text="Đơn hàng đã giao"
+                            android:text="Số đơn hàng đã giao"
                             android:textSize="15sp"
                             android:textStyle="bold" />
 
@@ -140,7 +140,34 @@
                             android:background="@color/g_line"
                             android:gravity="center"
                             android:padding="5dp"
-                            android:text="20"
+                            tools:text="20"
+                            android:textSize="15sp"
+                            android:textStyle="bold" />
+                    </TableRow>
+
+                    <TableRow android:layout_marginTop="2dp">
+
+                        <TextView
+                            style="@style/MediumTextViewThin"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:background="@color/g_blue100"
+                            android:padding="5dp"
+                            android:text="Số đơn hàng bị hủy"
+                            android:textSize="15sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/tvDonHangBiHuy"
+                            style="@style/SmallTextViewThin"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="4"
+                            android:background="@color/g_line"
+                            android:gravity="center"
+                            android:padding="5dp"
+                            tools:text="20"
                             android:textSize="15sp"
                             android:textStyle="bold" />
                     </TableRow>
@@ -167,7 +194,7 @@
                             android:background="@color/g_line"
                             android:gravity="center"
                             android:padding="5dp"
-                            android:text="20"
+                            tools:text="20"
                             android:textSize="15sp"
                             android:textStyle="bold" />
                     </TableRow>

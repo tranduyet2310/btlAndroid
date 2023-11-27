@@ -7,6 +7,7 @@ import androidx.appcompat.widget.Toolbar;
 import com.example.beginagain.Model.UserModel;
 import com.example.beginagain.R;
 import com.example.beginagain.Retrofit.ApiShop;
+import com.example.beginagain.Retrofit.RetrofitService;
 import com.example.beginagain.Utils.Utils;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -37,11 +38,15 @@ public class ThanhToanActivity extends AppCompatActivity {
     private Disposable disposable;
     private long tongTien;
     private int totalItem;
+    private ApiShop apiShop;
+    private RetrofitService retrofitService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_thanh_toan);
+        retrofitService = new RetrofitService();
+        apiShop = retrofitService.getRetrofit().create(ApiShop.class);
         initView();
         countItem();
         initControl();
@@ -71,9 +76,9 @@ public class ThanhToanActivity extends AppCompatActivity {
                     String str_chi_tiet = gson.toJson(Utils.mangmuahang);
 
                     Log.d("test", new Gson().toJson(Utils.mangmuahang));
-                    //new Gson().toJson(Utils.mangmuahang)
                     Log.d("test", str_chi_tiet);
-                    ApiShop.getApiShop.createOrder(str_email, str_sdt, String.valueOf(tongTien), id, str_diachi, totalItem, str_chi_tiet)
+
+                    apiShop.createOrder(str_email, str_sdt, String.valueOf(tongTien), id, str_diachi, totalItem, str_chi_tiet)
                             .subscribeOn(Schedulers.io())
                             .observeOn(AndroidSchedulers.mainThread())
                             .subscribe(new Observer<UserModel>() {

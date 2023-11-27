@@ -45,6 +45,7 @@ import com.example.beginagain.Model.User;
 import com.example.beginagain.Model.UserModel;
 import com.example.beginagain.R;
 import com.example.beginagain.Retrofit.ApiShop;
+import com.example.beginagain.Retrofit.RetrofitService;
 import com.example.beginagain.Utils.Utils;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.navigation.NavigationView;
@@ -73,6 +74,7 @@ public class MainActivity extends AppCompatActivity {
     private NavigationView navigationView;
     private DrawerLayout drawerLayout;
     private ApiShop apiShop;
+    private RetrofitService retrofitService;
     private Disposable disposable;
     private NotificationBadge badge;
     private FrameLayout frameLayout;
@@ -93,6 +95,9 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        retrofitService = new RetrofitService();
+        apiShop = retrofitService.getRetrofit().create(ApiShop.class);
+
         Paper.init(this);
         if (Paper.book().read("user") != null) {
             User user = Paper.book().read("user");
@@ -103,7 +108,7 @@ public class MainActivity extends AppCompatActivity {
         ActionBar();
         if (isConnected(this)) {
             ActionViewFlipper();
-            getLoaiSanPham();
+            //getLoaiSanPham();
             getSpMoi();
             getSpTot();
             getEventClick();
@@ -204,7 +209,7 @@ public class MainActivity extends AppCompatActivity {
                 }else if (TextUtils.isEmpty(str_address)) {
                     Toast.makeText(getApplicationContext(), "Vui lòng nhập địa chỉ", Toast.LENGTH_SHORT).show();
                 } else {
-                    apiShop.getApiShop.updateInfo(str_name, str_email, str_sdt, str_address, id)
+                    apiShop.updateInfo(str_name, str_email, str_sdt, str_address, id)
                             .subscribeOn(Schedulers.io())
                             .observeOn(AndroidSchedulers.mainThread())
                             .subscribe(new Observer<UserModel>() {
@@ -247,7 +252,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void getSpTot() {
-        apiShop.getApiShop.getSpMoi()
+        apiShop.getSpMoi()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<SanPhamMoiModel>() {
@@ -278,7 +283,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void getSpMoi() {
-        apiShop.getApiShop.getSpMoi()
+        apiShop.getSpMoi()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<SanPhamMoiModel>() {
@@ -309,7 +314,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void getLoaiSanPham() {
+   /* private void getLoaiSanPham() {
         apiShop.getApiShop.getLoaiSp()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -323,11 +328,10 @@ public class MainActivity extends AppCompatActivity {
                     public void onNext(@NonNull LoaiSpModel loaiSpModel) {
                         if (loaiSpModel.isSuccess()) {
                             mangLoaiSp = loaiSpModel.getResult();
-                            mangLoaiSp.add(new LoaiSp("Quản Lí", "https://previews.123rf.com/images/illizium/illizium1904/illizium190400043/124063357-project-management-icon-in-flat-style-project-symbol-for-your-web-site-design-logo-app-ui-vector-ill.jpg"));
-                            mangLoaiSp.add(new LoaiSp("Thống Kê", "https://thumbs.dreamstime.com/b/growth-business-success-increase-icon-vector-clean-coin-up-arrow-147142774.jpg"));
-                            mangLoaiSp.add(new LoaiSp("Đăng xuất", "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ35b7r6Hlo7XRTGOOjC-6pyqUwxSgej-0YjDVVZ5NHi6378PWi686DB87MlVK5r77_vDo&usqp=CAU"));
+                            mangLoaiSp.add(new LoaiSp("Giày", "https://previews.123rf.com/images/illizium/illizium1904/illizium190400043/124063357-project-management-icon-in-flat-style-project-symbol-for-your-web-site-design-logo-app-ui-vector-ill.jpg"));
+                            mangLoaiSp.add(new LoaiSp("Nón", "https://thumbs.dreamstime.com/b/growth-business-success-increase-icon-vector-clean-coin-up-arrow-147142774.jpg"));
+                            mangLoaiSp.add(new LoaiSp("", "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ35b7r6Hlo7XRTGOOjC-6pyqUwxSgej-0YjDVVZ5NHi6378PWi686DB87MlVK5r77_vDo&usqp=CAU"));
                             loaiSpAdapter = new LoaiSpAdapter(getApplicationContext(), mangLoaiSp);
-                            //listViewTrangChinh.setAdapter(loaiSpAdapter);
                         }
                     }
 
@@ -342,7 +346,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
 
-    }
+    } */
 
     private void ActionViewFlipper() {
         List<Integer> mangQuangCao = new ArrayList<>();
@@ -355,7 +359,7 @@ public class MainActivity extends AppCompatActivity {
             imageView.setScaleType(ImageView.ScaleType.FIT_XY);
             viewFlipper.addView(imageView);
         }
-        viewFlipper.setFlipInterval(3000);
+        viewFlipper.setFlipInterval(5000);
         viewFlipper.setAutoStart(true);
         Animation slide_in = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.slide_in_right);
         Animation slide_out = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.slide_out_right);
@@ -379,7 +383,6 @@ public class MainActivity extends AppCompatActivity {
         imageSearch = findViewById(R.id.imgseach);
         toolbar = findViewById(R.id.toobartrangchinh);
         viewFlipper = findViewById(R.id.vewlipper);
-        //listViewTrangChinh = findViewById(R.id.listviewtrangchinh);
         navigationView = findViewById(R.id.navigationview);
         drawerLayout = findViewById(R.id.drawerlayout);
         badge = findViewById(R.id.menu_sl);
@@ -439,7 +442,7 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onSuccess(String s) {
                         if (!TextUtils.isEmpty(s)) {
-                            apiShop.getApiShop.updateToken(Utils.user_current.getId(), s)
+                            apiShop.updateToken(Utils.user_current.getId(), s)
                                     .subscribeOn(Schedulers.io())
                                     .observeOn(AndroidSchedulers.mainThread())
                                     .subscribe(new Observer<MessageModels>() {

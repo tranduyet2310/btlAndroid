@@ -16,6 +16,7 @@ import com.example.beginagain.Model.SanPhamMoi;
 import com.example.beginagain.Model.SanPhamMoiModel;
 import com.example.beginagain.R;
 import com.example.beginagain.Retrofit.ApiShop;
+import com.example.beginagain.Retrofit.RetrofitService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,11 +40,17 @@ public class QuanAoActivity extends AppCompatActivity {
     private int loai;
     private boolean isLoading = false;
     private List<SanPhamMoi> sanPhamMoiList;
+    private ApiShop apiShop;
+    private RetrofitService retrofitService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_quan_ao);
+
+        retrofitService = new RetrofitService();
+        apiShop = retrofitService.getRetrofit().create(ApiShop.class);
+
         loai = getIntent().getIntExtra("loai", 1);
         initView();
         ActionToolbar();
@@ -69,7 +76,6 @@ public class QuanAoActivity extends AppCompatActivity {
                     if (lastVisibleItemPosition == totalItemCount - 1) {
                         isLoading = true;
                         loadMore();
-                        //Toast.makeText(QuanAoActivity.this, "LoadMore()", Toast.LENGTH_SHORT).show();
                     }
                 }
             }
@@ -98,7 +104,7 @@ public class QuanAoActivity extends AppCompatActivity {
     }
 
     private void getData(int page) {
-        ApiShop.getApiShop.getSanPham(page, loai)
+        apiShop.getSanPham(page, loai)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<SanPhamMoiModel>() {

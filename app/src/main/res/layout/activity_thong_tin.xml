@@ -48,7 +48,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:text="Hệ thống cửa hàng\n Thời trang &amp; Phụ kiện"
+        android:text="Cửa hàng\n Thời trang &amp; Phụ kiện"
         android:textAlignment="center"
         android:textSize="30sp"
         app:layout_constraintBottom_toBottomOf="@id/ellipse"

@@ -14,6 +14,7 @@ import android.widget.Toast;
 import com.example.beginagain.Model.UserModel;
 import com.example.beginagain.R;
 import com.example.beginagain.Retrofit.ApiShop;
+import com.example.beginagain.Retrofit.RetrofitService;
 import com.example.beginagain.Utils.Utils;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -31,6 +32,7 @@ public class DangKiActivity extends AppCompatActivity {
     private EditText email, pass, repass, mobile, username;
     private AppCompatButton button;
     private ApiShop apiShop;
+    private RetrofitService retrofitService;
     private FirebaseAuth firebaseAuth;
     private Disposable disposable;
 
@@ -38,6 +40,10 @@ public class DangKiActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dang_ki);
+
+        retrofitService = new RetrofitService();
+        apiShop = retrofitService.getRetrofit().create(ApiShop.class);
+
         initView();
         initControl();
     }
@@ -94,7 +100,7 @@ public class DangKiActivity extends AppCompatActivity {
     }
 
     private void postData(String str_email, String str_pass, String str_username, String str_mobile, String uid) {
-        apiShop.getApiShop.dangKi(str_username, str_email, str_pass, str_mobile, uid)
+        apiShop.dangKi(str_username, str_email, str_pass, str_mobile, uid)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<UserModel>() {
@@ -140,6 +146,7 @@ public class DangKiActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        disposable.dispose();
+        if (disposable != null)
+            disposable.dispose();
     }
 }

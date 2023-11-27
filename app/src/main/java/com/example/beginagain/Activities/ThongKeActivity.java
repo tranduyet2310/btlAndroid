@@ -7,6 +7,7 @@ import com.example.beginagain.Model.ThongKe;
 import com.example.beginagain.Model.ThongKeModel;
 import com.example.beginagain.R;
 import com.example.beginagain.Retrofit.ApiShop;
+import com.example.beginagain.Retrofit.RetrofitService;
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.data.BarData;
@@ -46,27 +47,66 @@ public class ThongKeActivity extends AppCompatActivity {
     private BarChart barChartDonHang;
     private PieChart pieChartSanPham;
     private TableLayout tableLayout;
-    private TextView tvTongDonHang, tvDonHangMoi, tvDonHangXuLy, tvDonHangGiao, tvDoanhThu;
+    private TextView tvTongDonHang, tvDonHangMoi, tvDonHangXuLy, tvDonHangGiao,tvDonHangBiHuy, tvDoanhThu;
     private Disposable disposable;
-    private long tongDh, tongDhMoi, tongDhXuLy, tongDhGiao;
+    private long tongDh, tongDhMoi, tongDhXuLy, tongDhGiao, tongDhVanChuyen, tongDhBiHuy;
     private List<BarEntry> listDataDh = new ArrayList<>();
+    private ApiShop apiShop;
+    private RetrofitService retrofitService;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_thong_ke);
+        retrofitService = new RetrofitService();
+        apiShop = retrofitService.getRetrofit().create(ApiShop.class);
         initView();
         ActionToolbar();
+        // Thong ke don hang
         getDataDonHang();
         getDonHangMoi();
         getDonHangXuLy();
         getDonHangDaGiao();
-        // Ve bieu do
+        getDonHangVanChuyen();
+        getDonHangBiHuy();
+        // Ve bieu do minh hoa
         getChartDonHang();
         getDataChart();
-        // Tao bang thong ke
+        // Tao bang thong ke san pham
         createTableSp();
+    }
+
+    private void getDonHangBiHuy() {
+        apiShop.getThongKe2(4)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<ThongKeModel>() {
+                    @Override
+                    public void onSubscribe(@NonNull Disposable d) {
+                        disposable = d;
+                    }
+
+                    @Override
+                    public void onNext(@NonNull ThongKeModel thongKeModel) {
+                        if(thongKeModel.isSuccess()){
+                            for (int i=0; i < thongKeModel.getResult().size(); i++){
+                                tongDhBiHuy = thongKeModel.getResult().get(i).getTong();
+                                tvDonHangBiHuy.setText(""+tongDhBiHuy);
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onError(@NonNull Throwable e) {
+                        Log.d(TAG, e.getMessage());
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        Log.d(TAG, "Lấy dữ liệu đơn hàng bị hủy xong");
+                    }
+                });
     }
 
     private void createTableSp() {
@@ -99,7 +139,7 @@ public class ThongKeActivity extends AppCompatActivity {
 
         tableLayout.addView(headerRow);
 
-        ApiShop.getApiShop.getThongKe()
+        apiShop.getThongKe3()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<ThongKeModel>() {
@@ -167,7 +207,7 @@ public class ThongKeActivity extends AppCompatActivity {
     }
 
     private void getDonHangDaGiao() {
-        ApiShop.getApiShop.getThongKe2(3)
+        apiShop.getThongKe2(3)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<ThongKeModel>() {
@@ -183,7 +223,7 @@ public class ThongKeActivity extends AppCompatActivity {
                                 tongDhGiao = thongKeModel.getResult().get(i).getTong();
                                 tvDonHangGiao.setText(""+tongDhGiao);
                                 float donhanggiao = (float) tongDhGiao;
-                                listDataDh.add(new BarEntry(1f, donhanggiao));
+                                listDataDh.add(new BarEntry(4f, donhanggiao));
                                 getChartDonHang();
                             }
                         }
@@ -202,8 +242,43 @@ public class ThongKeActivity extends AppCompatActivity {
 
     }
 
+    private void getDonHangVanChuyen() {
+        apiShop.getThongKe2(2)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<ThongKeModel>() {
+                    @Override
+                    public void onSubscribe(@NonNull Disposable d) {
+                        disposable = d;
+                    }
+
+                    @Override
+                    public void onNext(@NonNull ThongKeModel thongKeModel) {
+                        if(thongKeModel.isSuccess()){
+                            for (int i=0; i < thongKeModel.getResult().size(); i++){
+                                tongDhVanChuyen = thongKeModel.getResult().get(i).getTong();
+                                float donhanggiao = (float) tongDhVanChuyen;
+                                listDataDh.add(new BarEntry(3f, donhanggiao));
+                                getChartDonHang();
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onError(@NonNull Throwable e) {
+                        Log.d(TAG, e.getMessage());
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        Log.d(TAG, "Lấy dữ liệu đơn hàng vận chuyển xong");
+                    }
+                });
+
+    }
+
     private void getDonHangXuLy() {
-        ApiShop.getApiShop.getThongKe2(1)
+        apiShop.getThongKe2(1)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<ThongKeModel>() {
@@ -238,7 +313,7 @@ public class ThongKeActivity extends AppCompatActivity {
     }
 
     private void getDonHangMoi() {
-        ApiShop.getApiShop.getThongKe2(0)
+        apiShop.getThongKe2(0)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<ThongKeModel>() {
@@ -254,7 +329,7 @@ public class ThongKeActivity extends AppCompatActivity {
                                 tongDhMoi = thongKeModel.getResult().get(i).getTong();
                                 tvDonHangMoi.setText(""+tongDhMoi);
                                 float donhangmoi = (float) tongDhMoi;
-                                listDataDh.add(new BarEntry(3f, donhangmoi));
+                                listDataDh.add(new BarEntry(1f, donhangmoi));
                                 getChartDonHang();
                             }
                         }
@@ -273,7 +348,7 @@ public class ThongKeActivity extends AppCompatActivity {
     }
 
     private void getDataDonHang() {
-        ApiShop.getApiShop.getThongKe1()
+        apiShop.getThongKe1()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<ThongKeModel>() {
@@ -288,13 +363,15 @@ public class ThongKeActivity extends AppCompatActivity {
                             for (int i=0; i < thongKeModel.getResult().size(); i++){
                                 String sodon = thongKeModel.getResult().get(i).getTensp();
                                 tongDh = Long.parseLong(sodon);
+                                tvTongDonHang.setText(sodon);
+
                                 long tong = thongKeModel.getResult().get(i).getTong();
                                 DecimalFormat decimalFormat = new DecimalFormat("###,###,###");
                                 String doanhThu = decimalFormat.format(tong);
-                                tvTongDonHang.setText(sodon);
                                 tvDoanhThu.setText(doanhThu);
+
                                 float donhang = (float) tongDh;
-                                listDataDh.add(new BarEntry(4f, donhang));
+                                listDataDh.add(new BarEntry(5f, donhang));
                                 getChartDonHang();
                             }
                         }
@@ -314,7 +391,7 @@ public class ThongKeActivity extends AppCompatActivity {
 
     private void getDataChart() {
         List<PieEntry> listData = new ArrayList<>();
-        ApiShop.getApiShop.getThongKe()
+        apiShop.getThongKe()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<ThongKeModel>() {
@@ -379,6 +456,7 @@ public class ThongKeActivity extends AppCompatActivity {
         tvDonHangXuLy = findViewById(R.id.tvDonHangXuLy);
         tvDonHangGiao = findViewById(R.id.tvDonHangDaGiao);
         tvDoanhThu = findViewById(R.id.tvDoanhThuDuKien);
+        tvDonHangBiHuy = findViewById(R.id.tvDonHangBiHuy);
     }
 
     @Override

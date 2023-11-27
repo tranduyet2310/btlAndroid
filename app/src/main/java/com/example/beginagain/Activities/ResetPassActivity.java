@@ -14,6 +14,7 @@ import android.widget.Toast;
 import com.example.beginagain.Model.UserModel;
 import com.example.beginagain.R;
 import com.example.beginagain.Retrofit.ApiShop;
+import com.example.beginagain.Retrofit.RetrofitService;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.annotations.NonNull;
@@ -28,6 +29,7 @@ public class ResetPassActivity extends AppCompatActivity {
     private AppCompatButton btnReset;
 
     private ApiShop apiShop;
+    private RetrofitService retrofitService;
 
     private Disposable disposable;
 
@@ -37,6 +39,10 @@ public class ResetPassActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_reset_pass);
+
+        retrofitService = new RetrofitService();
+        apiShop = retrofitService.getRetrofit().create(ApiShop.class);
+
         intitView();
         initControl();
     }
@@ -50,7 +56,7 @@ public class ResetPassActivity extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), "Bạn chưa nhập Email", Toast.LENGTH_SHORT).show();
                 }else{
                     progressBar.setVisibility(View.VISIBLE);
-                    apiShop.getApiShop.resetPass(str_email)
+                    apiShop.resetPass(str_email)
                             .subscribeOn(Schedulers.io())
                             .observeOn(AndroidSchedulers.mainThread())
                             .subscribe(new Observer<UserModel>() {

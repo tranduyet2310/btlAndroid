@@ -14,7 +14,9 @@ import com.example.beginagain.Model.EventBus.DonHangEvent;
 import com.example.beginagain.Model.MessageModels;
 import com.example.beginagain.R;
 import com.example.beginagain.Retrofit.ApiShop;
+import com.example.beginagain.Retrofit.RetrofitService;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -48,18 +50,22 @@ public class XemDonHangActivity extends AppCompatActivity {
     private AlertDialog dialog;
     private int tinhtrang;
     private Disposable disposable;
+    private ApiShop apiShop;
+    private RetrofitService retrofitService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_xem_don_hang);
+        retrofitService = new RetrofitService();
+        apiShop = retrofitService.getRetrofit().create(ApiShop.class);
         initView();
         initToolbar();
         getOrder();
     }
 
     private void getOrder() {
-        ApiShop.getApiShop.xemDonHang(0)
+        apiShop.xemDonHang(0)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<DonHangModel>() {
@@ -141,7 +147,6 @@ public class XemDonHangActivity extends AppCompatActivity {
     @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
     public void eventDonHang(DonHangEvent event) {
         if (event != null) {
-            //Toast.makeText(this, "Event luôn", Toast.LENGTH_SHORT).show();
             donHang = event.getDonHang();
             showCustomDialog();
         }
@@ -181,6 +186,12 @@ public class XemDonHangActivity extends AppCompatActivity {
             }
         });
 
+        if(donHang.getTrangthai() == 4){
+            btnDongY.setEnabled(false);
+            btnDongY.setBackgroundColor(Color.parseColor("#E9EAEC"));
+            btnDongY.setText("Đơn hàng đã bị hủy");
+        }
+
         btnDongY.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -195,7 +206,7 @@ public class XemDonHangActivity extends AppCompatActivity {
     }
 
     private void capNhatDonHang() {
-        ApiShop.getApiShop.updateDonHang(donHang.getId(), tinhtrang)
+        apiShop.updateDonHang(donHang.getId(), tinhtrang)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<MessageModels>() {

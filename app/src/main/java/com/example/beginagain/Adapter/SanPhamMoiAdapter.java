@@ -14,7 +14,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.beginagain.Activities.ChiTietActivity;
+import com.example.beginagain.Interface.ImageClickListener;
 import com.example.beginagain.Interface.ItemClickListener;
+import com.example.beginagain.Interface.OnItemClickListener;
 import com.example.beginagain.Model.EventBus.SuaXoaEvent;
 import com.example.beginagain.Model.SanPhamMoi;
 import com.example.beginagain.R;
@@ -29,6 +31,7 @@ public class SanPhamMoiAdapter extends RecyclerView.Adapter<SanPhamMoiAdapter.It
 
     private Context context;
     private List<SanPhamMoi> list;
+    private OnItemClickListener listener;
 
     public SanPhamMoiAdapter(Context context, List<SanPhamMoi> list) {
         this.context = context;
@@ -70,6 +73,24 @@ public class SanPhamMoiAdapter extends RecyclerView.Adapter<SanPhamMoiAdapter.It
             }
         });
 
+        holder.imgEdit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(listener != null){
+                    listener.onItemClick(sanPhamMoi, true);
+                }
+            }
+        });
+
+        holder.imgDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(listener != null){
+                    listener.onItemClick(sanPhamMoi, false);
+                }
+            }
+        });
+
     }
 
     @Override
@@ -77,20 +98,21 @@ public class SanPhamMoiAdapter extends RecyclerView.Adapter<SanPhamMoiAdapter.It
         return list.size();
     }
 
-    public class ItemViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener, View.OnCreateContextMenuListener {
+    public class ItemViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         private TextView txtGiaSp, txtTenSp;
-        private ImageView imgHinhAnh;
+        private ImageView imgHinhAnh, imgEdit, imgDelete;
         private ItemClickListener itemClickListener;
+        private ImageClickListener imageClickListener;
 
         public ItemViewHolder(@NonNull View itemView) {
             super(itemView);
             txtTenSp = itemView.findViewById(R.id.itemsp_tenNew);
             txtGiaSp = itemView.findViewById(R.id.itemsp_giaNew);
             imgHinhAnh = itemView.findViewById(R.id.itemsp_imageNew);
+            imgEdit = itemView.findViewById(R.id.imgEdit);
+            imgDelete = itemView.findViewById(R.id.imgDelete);
             itemView.setOnClickListener(this);
-            itemView.setOnCreateContextMenuListener(this);
-            itemView.setOnLongClickListener(this);
         }
 
         public void setItemClickListener(ItemClickListener itemClickListener) {
@@ -101,18 +123,13 @@ public class SanPhamMoiAdapter extends RecyclerView.Adapter<SanPhamMoiAdapter.It
         public void onClick(View view) {
             itemClickListener.onClick(view, getAdapterPosition(), false);
         }
-
-        @Override
-        public boolean onLongClick(View view) {
-            itemClickListener.onClick(view, getAdapterPosition(), true);
-            return false;
-        }
-
-        @Override
-        public void onCreateContextMenu(ContextMenu contextMenu, View view, ContextMenu.ContextMenuInfo contextMenuInfo) {
-            contextMenu.add(0, 0, getAdapterPosition(), "Sửa");
-            contextMenu.add(0, 1, getAdapterPosition(), "Xóa");
-        }
     }
 
+    public void setListener(OnItemClickListener listener) {
+        this.listener = listener;
+    }
+
+    public void updateData(List<SanPhamMoi> newData){
+        this.list = newData;
+    }
 }

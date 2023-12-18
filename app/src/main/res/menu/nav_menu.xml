@@ -28,7 +28,7 @@
     <item
         android:id="@+id/mnu_thongke"
         android:icon="@drawable/ic_chart_24"
-        android:title="Thống kê" />
+        android:title="Thống kê chi tiết" />
 
     <item android:title="">
         <menu>

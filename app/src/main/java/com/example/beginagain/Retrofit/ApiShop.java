@@ -6,22 +6,13 @@ import com.example.beginagain.Model.MessageModels;
 import com.example.beginagain.Model.SanPhamMoiModel;
 import com.example.beginagain.Model.ThongKeModel;
 import com.example.beginagain.Model.UserModel;
-import com.example.beginagain.Utils.Utils;
-
-import java.util.concurrent.TimeUnit;
 
 import io.reactivex.rxjava3.core.Observable;
 import okhttp3.MultipartBody;
-import okhttp3.OkHttpClient;
-import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Call;
-import retrofit2.Retrofit;
-import retrofit2.adapter.rxjava3.RxJava3CallAdapterFactory;
-import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
-import retrofit2.http.Headers;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.Part;
@@ -40,11 +31,17 @@ public interface ApiShop {
             @Field("loai") int trangthai
     );
 
-    @GET("thongke3.php")
-    Observable<ThongKeModel> getThongKe3();
+    @POST("thongke3.php")
+    @FormUrlEncoded
+    Observable<ThongKeModel> getThongKe3(
+            @Field("loai") String date
+    );
 
-    @GET("thongke3.php")
-    Observable<ThongKeModel> getThongKe4();
+    @POST("thongke4.php")
+    @FormUrlEncoded
+    Observable<ThongKeModel> getThongKe4(
+            @Field("loai") String date
+    );
 
     @GET("getloaisp.php")
     Observable<LoaiSpModel> getLoaiSp();
@@ -57,6 +54,14 @@ public interface ApiShop {
     Observable<SanPhamMoiModel> getSanPham(
             @Field("page") int page,
             @Field("loai") int loai
+    );
+
+    @GET("getsanpham.php")
+    Observable<SanPhamMoiModel> getQuanAo(
+    );
+
+    @GET("getSp.php")
+    Observable<SanPhamMoiModel> getPhuKien(
     );
 
     @POST("insertsp.php")
@@ -125,6 +130,12 @@ public interface ApiShop {
     @FormUrlEncoded
     Observable<DonHangModel> xemDonHang(
             @Field("iduser") int id
+    );
+
+    @POST("xemdonhang2.php")
+    @FormUrlEncoded
+    Observable<DonHangModel> xemDonHang2(
+            @Field("date") String date
     );
 
     @POST("updatedonhang.php")

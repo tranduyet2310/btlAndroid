@@ -15,25 +15,25 @@
         app:title="@string/chi_tiet_san_pham"
         app:titleTextColor="@color/white">
 
-        <FrameLayout
-            android:id="@+id/framegiohang"
-            android:layout_width="55dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="right"
-            android:layout_marginEnd="10dp">
+<!--        <FrameLayout-->
+<!--            android:id="@+id/framegiohang"-->
+<!--            android:layout_width="55dp"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_gravity="right"-->
+<!--            android:layout_marginEnd="10dp">-->
 
-            <com.nex3z.notificationbadge.NotificationBadge
-                android:id="@+id/menu_sl"
-                android:layout_width="28dp"
-                android:layout_height="28dp"
-                android:layout_gravity="top|right" />
+<!--            <com.nex3z.notificationbadge.NotificationBadge-->
+<!--                android:id="@+id/menu_sl"-->
+<!--                android:layout_width="28dp"-->
+<!--                android:layout_height="28dp"-->
+<!--                android:layout_gravity="top|right" />-->
 
-            <ImageView
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_marginTop="15dp"
-                android:src="@drawable/ic_cart" />
-        </FrameLayout>
+<!--            <ImageView-->
+<!--                android:layout_width="30dp"-->
+<!--                android:layout_height="30dp"-->
+<!--                android:layout_marginTop="15dp"-->
+<!--                android:src="@drawable/ic_cart" />-->
+<!--        </FrameLayout>-->
     </androidx.appcompat.widget.Toolbar>
 
     <androidx.core.widget.NestedScrollView
@@ -152,32 +152,32 @@
 
             </LinearLayout>
 
-            <Spinner
-                android:id="@+id/spinner"
-                android:layout_width="match_parent"
-                android:layout_height="32dp"
-                android:layout_marginStart="20dp"
-                android:layout_marginTop="5dp"
-                android:layout_marginEnd="20dp"
-                android:background="@drawable/spinner"
-                android:gravity="center"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/linearProductPref" />
+<!--            <Spinner-->
+<!--                android:id="@+id/spinner"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="32dp"-->
+<!--                android:layout_marginStart="20dp"-->
+<!--                android:layout_marginTop="5dp"-->
+<!--                android:layout_marginEnd="20dp"-->
+<!--                android:background="@drawable/spinner"-->
+<!--                android:gravity="center"-->
+<!--                app:layout_constraintEnd_toEndOf="parent"-->
+<!--                app:layout_constraintStart_toStartOf="parent"-->
+<!--                app:layout_constraintTop_toBottomOf="@id/linearProductPref" />-->
 
-            <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/btnthemvaogiohang"
-                style="@style/blueButtonStyle"
-                android:layout_width="0dp"
-                android:layout_height="@dimen/mediumButtonHeight"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="10dp"
-                android:text="Thêm vào giỏ hàng"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="@id/linearProductPref"
-                app:layout_constraintStart_toStartOf="@id/linearProductPref"
-                app:layout_constraintTop_toBottomOf="@id/spinner"
-                app:spinning_bar_color="@color/white" />
+<!--            <androidx.appcompat.widget.AppCompatButton-->
+<!--                android:id="@+id/btnthemvaogiohang"-->
+<!--                style="@style/blueButtonStyle"-->
+<!--                android:layout_width="0dp"-->
+<!--                android:layout_height="@dimen/mediumButtonHeight"-->
+<!--                android:layout_marginTop="10dp"-->
+<!--                android:layout_marginBottom="10dp"-->
+<!--                android:text="Thêm vào giỏ hàng"-->
+<!--                app:layout_constraintBottom_toBottomOf="parent"-->
+<!--                app:layout_constraintEnd_toEndOf="@id/linearProductPref"-->
+<!--                app:layout_constraintStart_toStartOf="@id/linearProductPref"-->
+<!--                app:layout_constraintTop_toBottomOf="@id/spinner"-->
+<!--                app:spinning_bar_color="@color/white" />-->
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>

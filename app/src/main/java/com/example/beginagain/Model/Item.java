@@ -50,4 +50,15 @@ public class Item {
     public void setGia(String gia) {
         this.gia = gia;
     }
+
+    @Override
+    public String toString() {
+        return "Item{" +
+                "idsp=" + idsp +
+                ", tensp='" + tensp + '\'' +
+                ", soluong=" + soluong +
+                ", hinhanh='" + hinhanh + '\'' +
+                ", gia='" + gia + '\'' +
+                '}';
+    }
 }

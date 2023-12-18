@@ -6,8 +6,6 @@ import androidx.appcompat.widget.AppCompatButton;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
@@ -20,27 +18,30 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ViewFlipper;
 
-import com.bumptech.glide.Glide;
 import com.example.beginagain.Adapter.LoaiSpAdapter;
 import com.example.beginagain.Adapter.SanPhamMoiAdapter;
 import com.example.beginagain.Adapter.SanPhamTotAdapter;
+import com.example.beginagain.Adapter.ThongKeDhAdapter;
+import com.example.beginagain.Adapter.TkDhTheoThangAdapter;
+import com.example.beginagain.Model.DonHang;
+import com.example.beginagain.Model.DonHangModel;
 import com.example.beginagain.Model.LoaiSp;
-import com.example.beginagain.Model.LoaiSpModel;
 import com.example.beginagain.Model.MessageModels;
 import com.example.beginagain.Model.SanPhamMoi;
-import com.example.beginagain.Model.SanPhamMoiModel;
+import com.example.beginagain.Model.ThongKeModel;
 import com.example.beginagain.Model.User;
 import com.example.beginagain.Model.UserModel;
 import com.example.beginagain.R;
@@ -53,8 +54,12 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.nex3z.notificationbadge.NotificationBadge;
 
+import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import io.paperdb.Paper;
@@ -68,6 +73,10 @@ public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "MainActivity";
     private Toolbar toolbar;
+    private TextView tvSoLuongSp, tvDoanhSoThang, tvThoiGian;
+    private ListView lvDonHangHomNay, lvDonHangThang;
+    private Spinner spinner_thang;
+    private LinearLayout linearLayoutCart1, linearLayoutCart2;
     private ViewFlipper viewFlipper;
     private RecyclerView recyclerViewSPNew;
     private RecyclerView recyclerViewSPBest;
@@ -89,6 +98,8 @@ public class MainActivity extends AppCompatActivity {
     private CircleImageView circleImageView;
     private SanPhamMoiAdapter sanPhamMoiAdapter;
     private SanPhamTotAdapter sanPhamTotAdapter;
+    private String currentMonth, currentDay, currentMonthYear;
+    private List<DonHang> donHangTodayList, donHangMonthList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -107,15 +118,176 @@ public class MainActivity extends AppCompatActivity {
         initView();
         ActionBar();
         if (isConnected(this)) {
-            ActionViewFlipper();
+//            ActionViewFlipper();
             //getLoaiSanPham();
-            getSpMoi();
-            getSpTot();
+//            getSpMoi();
+//            getSpTot();
+            getTongSp();
+            getTongTien();
+            getDonHangHomNay();
+            getDonHangThang(currentMonth);
+            catchSpinnerEvent();
             getEventClick();
         } else {
             Toast.makeText(getApplicationContext(), "Không kết nối Internet, vui lòng thử lại", Toast.LENGTH_SHORT).show();
         }
 
+    }
+
+    private void catchSpinnerEvent() {
+        spinner_thang.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                if(i >= 1){
+                    currentMonth = getMonth(i);
+                    getDonHangThang(currentMonth);
+                    getTongTien();
+                    getTongSp();
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+    }
+
+    private void getTongTien() {
+        apiShop.getThongKe4(currentMonth)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<ThongKeModel>() {
+                    @Override
+                    public void onSubscribe(@NonNull Disposable d) {
+                        disposable = d;
+                    }
+
+                    @Override
+                    public void onNext(@NonNull ThongKeModel thongKeModel) {
+                        if (thongKeModel.isSuccess()) {
+                            for (int i = 0; i < thongKeModel.getResult().size(); i++) {
+                                long tongTienSp = thongKeModel.getResult().get(i).getTong();
+                                DecimalFormat decimalFormat = new DecimalFormat("###,###,### đ");
+                                tvDoanhSoThang.setText(decimalFormat.format(tongTienSp));
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onError(@NonNull Throwable e) {
+                        Log.d(TAG, e.getMessage());
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        Log.d(TAG, "Lấy dữ liệu thành công");
+                    }
+                });
+    }
+
+    private void getTongSp() {
+        apiShop.getThongKe3(currentMonth)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<ThongKeModel>() {
+                    @Override
+                    public void onSubscribe(@NonNull Disposable d) {
+                        disposable = d;
+                    }
+
+                    @Override
+                    public void onNext(@NonNull ThongKeModel thongKeModel) {
+                        if (thongKeModel.isSuccess()) {
+                            for (int i = 0; i < thongKeModel.getResult().size(); i++) {
+                                long tongSp = thongKeModel.getResult().get(i).getTong();
+                                tvSoLuongSp.setText(String.valueOf(tongSp));
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onError(@NonNull Throwable e) {
+                        Log.d(TAG, "" + e.getMessage());
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        Log.d(TAG, "Lấy dữ liệu thành công");
+                    }
+                });
+    }
+
+    private void getDonHangThang(String month) {
+        apiShop.xemDonHang2(month)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<DonHangModel>() {
+                    @Override
+                    public void onSubscribe(@NonNull Disposable d) {
+                        disposable = d;
+                    }
+
+                    @Override
+                    public void onNext(@NonNull DonHangModel donHangModel) {
+                        donHangMonthList = donHangModel.getResult();
+                        TkDhTheoThangAdapter adapter = new TkDhTheoThangAdapter(getApplicationContext(), donHangMonthList);
+                        lvDonHangThang.setAdapter(adapter);
+                    }
+
+                    @Override
+                    public void onError(@NonNull Throwable e) {
+                        Log.d(TAG, "Lỗi lấy đơn hàng theo tháng " + e.getMessage());
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        Log.d(TAG, "Lấy đơn hàng theo tháng thành công!");
+                        if (donHangMonthList.size() == 0) {
+                            lvDonHangThang.setVisibility(View.GONE);
+                            linearLayoutCart2.setVisibility(View.VISIBLE);
+                        } else {
+                            lvDonHangThang.setVisibility(View.VISIBLE);
+                            linearLayoutCart2.setVisibility(View.GONE);
+                        }
+                    }
+                });
+    }
+
+    private void getDonHangHomNay() {
+        apiShop.xemDonHang2(currentDay)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<DonHangModel>() {
+                    @Override
+                    public void onSubscribe(@NonNull Disposable d) {
+                        disposable = d;
+                    }
+
+                    @Override
+                    public void onNext(@NonNull DonHangModel donHangModel) {
+                        donHangTodayList = donHangModel.getResult();
+                        ThongKeDhAdapter adapter = new ThongKeDhAdapter(getApplicationContext(), donHangTodayList);
+                        lvDonHangHomNay.setAdapter(adapter);
+                    }
+
+                    @Override
+                    public void onError(@NonNull Throwable e) {
+                        Log.d(TAG, "Lỗi lấy đơn hàng hôm nay " + e.getMessage());
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        Log.d(TAG, "Lấy đơn hàng hôm nay thành công!");
+                        if (donHangTodayList.size() == 0) {
+                            lvDonHangHomNay.setVisibility(View.GONE);
+                            linearLayoutCart1.setVisibility(View.VISIBLE);
+                        } else {
+                            lvDonHangHomNay.setVisibility(View.VISIBLE);
+                            linearLayoutCart1.setVisibility(View.GONE);
+                        }
+                    }
+                });
     }
 
     private void getEventClick() {
@@ -163,14 +335,14 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             }
         });
-        
+
         circleImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 showCustomDialog();
             }
         });
-        
+
     }
 
     private void showCustomDialog() {
@@ -204,9 +376,9 @@ public class MainActivity extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), "Vui lòng nhập Username", Toast.LENGTH_SHORT).show();
                 } else if (TextUtils.isEmpty(str_email)) {
                     Toast.makeText(getApplicationContext(), "Vui lòng nhập Email", Toast.LENGTH_SHORT).show();
-                }else if (TextUtils.isEmpty(str_sdt)) {
+                } else if (TextUtils.isEmpty(str_sdt)) {
                     Toast.makeText(getApplicationContext(), "Vui lòng nhập SĐT", Toast.LENGTH_SHORT).show();
-                }else if (TextUtils.isEmpty(str_address)) {
+                } else if (TextUtils.isEmpty(str_address)) {
                     Toast.makeText(getApplicationContext(), "Vui lòng nhập địa chỉ", Toast.LENGTH_SHORT).show();
                 } else {
                     apiShop.updateInfo(str_name, str_email, str_sdt, str_address, id)
@@ -225,7 +397,7 @@ public class MainActivity extends AppCompatActivity {
 
                                 @Override
                                 public void onError(@NonNull Throwable e) {
-                                    Log.d(TAG, "Loi updateinfo "+e.getMessage());
+                                    Log.d(TAG, "Loi updateinfo " + e.getMessage());
                                 }
 
                                 @Override
@@ -251,6 +423,7 @@ public class MainActivity extends AppCompatActivity {
         dialog.show();
     }
 
+    /*
     private void getSpTot() {
         apiShop.getSpMoi()
                 .subscribeOn(Schedulers.io())
@@ -282,6 +455,9 @@ public class MainActivity extends AppCompatActivity {
                 });
     }
 
+     */
+
+    /*
     private void getSpMoi() {
         apiShop.getSpMoi()
                 .subscribeOn(Schedulers.io())
@@ -313,6 +489,8 @@ public class MainActivity extends AppCompatActivity {
                 });
 
     }
+
+     */
 
    /* private void getLoaiSanPham() {
         apiShop.getApiShop.getLoaiSp()
@@ -348,6 +526,7 @@ public class MainActivity extends AppCompatActivity {
 
     } */
 
+    /*
     private void ActionViewFlipper() {
         List<Integer> mangQuangCao = new ArrayList<>();
         mangQuangCao.add(R.drawable.banner_1);
@@ -367,9 +546,11 @@ public class MainActivity extends AppCompatActivity {
         viewFlipper.setOutAnimation(slide_out);
     }
 
+     */
+
     private void ActionBar() {
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
         toolbar.setNavigationIcon(android.R.drawable.ic_menu_sort_by_size);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
@@ -380,13 +561,38 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initView() {
-        imageSearch = findViewById(R.id.imgseach);
+//        imageSearch = findViewById(R.id.imgseach);
         toolbar = findViewById(R.id.toobartrangchinh);
-        viewFlipper = findViewById(R.id.vewlipper);
+//        viewFlipper = findViewById(R.id.vewlipper);
         navigationView = findViewById(R.id.navigationview);
         drawerLayout = findViewById(R.id.drawerlayout);
-        badge = findViewById(R.id.menu_sl);
-        frameLayout = findViewById(R.id.framegiohang);
+//        badge = findViewById(R.id.menu_sl);
+//        frameLayout = findViewById(R.id.framegiohang);
+        tvSoLuongSp = findViewById(R.id.tvSoLuongSp);
+        tvDoanhSoThang = findViewById(R.id.tvDoanhSoThang);
+        tvThoiGian = findViewById(R.id.tvThoiGian);
+        lvDonHangHomNay = findViewById(R.id.lvDonHangHomNay);
+        lvDonHangThang = findViewById(R.id.lvDonHangThang);
+        spinner_thang = findViewById(R.id.spinner_thang);
+        linearLayoutCart1 = findViewById(R.id.linearLayoutCart);
+        linearLayoutCart2 = findViewById(R.id.linearLayoutCart2);
+
+//        Date currentDate = new Date();
+//        SimpleDateFormat ft = new SimpleDateFormat("MM/yyyy");
+//        SimpleDateFormat ft2 = new SimpleDateFormat("%-MM%");
+//        SimpleDateFormat ft3 = new SimpleDateFormat("yyyy-MM-dd");
+        this.currentMonthYear = formatDate(0);
+        this.currentMonth = formatDate(1);
+        this.currentDay = formatDate(2);
+        tvThoiGian.setText("Tháng " + currentMonthYear);
+
+        List<String> stringList = new ArrayList<>();
+        stringList.add("Chọn tháng");
+        for (int i = 1; i <= 12; i++) {
+            stringList.add("Tháng " + i);
+        }
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, stringList);
+        spinner_thang.setAdapter(adapter);
 
         navigationView.setItemIconTintList(null);
         View headerView = navigationView.getHeaderView(0);
@@ -396,45 +602,72 @@ public class MainActivity extends AppCompatActivity {
         tvEmailAddress.setText(Utils.user_current.getEmail());
         tvUseNameCur.setText(Utils.user_current.getUsername());
 
-        recyclerViewSPNew = findViewById(R.id.recycleviewSPNew);
-        recyclerViewSPBest = findViewById(R.id.recycleviewSPBest);
-        RecyclerView.LayoutManager layoutManagerNew = new GridLayoutManager(this, 2);
-        RecyclerView.LayoutManager layoutManagerBest = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
-        recyclerViewSPNew.setLayoutManager(layoutManagerNew);
-        recyclerViewSPNew.setHasFixedSize(true);
-        recyclerViewSPBest.setLayoutManager(layoutManagerBest);
-        recyclerViewSPBest.setHasFixedSize(true);
 
-        mangSpMoi = new ArrayList<>();
-        mangLoaiSp = new ArrayList<>();
-        mangSpTot = new ArrayList<>();
-        if (Utils.manggiohang == null) {
-            Utils.manggiohang = new ArrayList<>();
-        } else {
-            int totalItem = 0;
-            for (int i = 0; i < Utils.manggiohang.size(); i++) {
-                totalItem = totalItem + Utils.manggiohang.get(i).getSoluong();
-            }
-            badge.setText(String.valueOf(totalItem));
-        }
+//        recyclerViewSPNew = findViewById(R.id.recycleviewSPNew);
+//        recyclerViewSPBest = findViewById(R.id.recycleviewSPBest);
+//        RecyclerView.LayoutManager layoutManagerNew = new GridLayoutManager(this, 2);
+//        RecyclerView.LayoutManager layoutManagerBest = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+//        recyclerViewSPNew.setLayoutManager(layoutManagerNew);
+//        recyclerViewSPNew.setHasFixedSize(true);
+//        recyclerViewSPBest.setLayoutManager(layoutManagerBest);
+//        recyclerViewSPBest.setHasFixedSize(true);
 
-        frameLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent gioHang = new Intent(getApplicationContext(), GioHangActivity.class);
-                startActivity(gioHang);
-            }
-        });
-
-        imageSearch.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(), SearchActivity.class);
-                startActivity(intent);
-            }
-        });
+//        mangSpMoi = new ArrayList<>();
+//        mangLoaiSp = new ArrayList<>();
+//        mangSpTot = new ArrayList<>();
+//        if (Utils.manggiohang == null) {
+//            Utils.manggiohang = new ArrayList<>();
+//        } else {
+//            int totalItem = 0;
+//            for (int i = 0; i < Utils.manggiohang.size(); i++) {
+//                totalItem = totalItem + Utils.manggiohang.get(i).getSoluong();
+//            }
+//            badge.setText(String.valueOf(totalItem));
+//        }
+//
+//        frameLayout.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Intent gioHang = new Intent(getApplicationContext(), GioHangActivity.class);
+//                startActivity(gioHang);
+//            }
+//        });
+//
+//        imageSearch.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Intent intent = new Intent(getApplicationContext(), SearchActivity.class);
+//                startActivity(intent);
+//            }
+//        });
 
     }
+
+    public String formatDate(int type) {
+        Date currentDate = new Date();
+        switch (type) {
+            case 0:
+                SimpleDateFormat ft = new SimpleDateFormat("MM/yyyy");
+                return ft.format(currentDate);
+            case 1:
+                SimpleDateFormat ft2 = new SimpleDateFormat("%-MM%");
+                return ft2.format(currentDate);
+            case 2:
+                SimpleDateFormat ft3 = new SimpleDateFormat("yyyy-MM-dd");
+                return ft3.format(currentDate);
+        }
+        return "";
+    }
+
+    public String getMonth(int i) {
+        StringBuilder sb = new StringBuilder("%-MM%");
+        if (i < 10) {
+            String rs = "0" + i;
+            sb.replace(2, 4, rs);
+        } else sb.replace(2, 4, String.valueOf(i));
+        return sb.toString();
+    }
+
 
     private void getToken() {
         FirebaseMessaging.getInstance().getToken()
@@ -486,11 +719,11 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onRestart() {
         super.onRestart();
-        int totalItem = 0;
-        for (int i = 0; i < Utils.manggiohang.size(); i++) {
-            totalItem = totalItem + Utils.manggiohang.get(i).getSoluong();
-        }
-        badge.setText(String.valueOf(totalItem));
+//        int totalItem = 0;
+//        for (int i = 0; i < Utils.manggiohang.size(); i++) {
+//            totalItem = totalItem + Utils.manggiohang.get(i).getSoluong();
+//        }
+//        badge.setText(String.valueOf(totalItem));
     }
 
     @Override

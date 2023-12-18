@@ -139,7 +139,7 @@ public class ThongKeActivity extends AppCompatActivity {
 
         tableLayout.addView(headerRow);
 
-        apiShop.getThongKe3()
+        apiShop.getThongKe()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<ThongKeModel>() {

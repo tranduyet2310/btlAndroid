@@ -20,4 +20,12 @@ public class ThongKe {
     public void setTong(long tong) {
         this.tong = tong;
     }
+
+    @Override
+    public String toString() {
+        return "ThongKe{" +
+                "tensp='" + tensp + '\'' +
+                ", tong=" + tong +
+                '}';
+    }
 }

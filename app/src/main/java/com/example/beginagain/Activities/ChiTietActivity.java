@@ -46,14 +46,14 @@ public class ChiTietActivity extends AppCompatActivity {
     }
 
     private void initControl() {
-        btnThem.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                themGioHang();
-            }
-        });
+//        btnThem.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                themGioHang();
+//            }
+//        });
     }
-
+/*
     private void themGioHang() {
         if (Utils.manggiohang.size() > 0) {
             boolean flag = false;
@@ -95,7 +95,7 @@ public class ChiTietActivity extends AppCompatActivity {
         badge.setText(String.valueOf(totalItem));
     }
 
-
+*/
     private void initData() {
         sanPhamMoi = (SanPhamMoi) getIntent().getSerializableExtra("chitiet");
         tenSp.setText(sanPhamMoi.getTensp());
@@ -111,9 +111,11 @@ public class ChiTietActivity extends AppCompatActivity {
 
         DecimalFormat decimalFormat = new DecimalFormat("###,###,###");
         giaSp.setText("Giá: " + decimalFormat.format(Double.parseDouble(sanPhamMoi.getGiasp())) + "đ");
+        /*
         Integer[] so = new Integer[]{1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
         ArrayAdapter<Integer> adapterSpin = new ArrayAdapter<>(this, androidx.appcompat.R.layout.support_simple_spinner_dropdown_item, so);
         spinner.setAdapter(adapterSpin);
+        */
     }
 
     private void ActionToolbar() {
@@ -132,10 +134,12 @@ public class ChiTietActivity extends AppCompatActivity {
         tenSp = findViewById(R.id.txttensp);
         giaSp = findViewById(R.id.txtgiasp);
         moTa = findViewById(R.id.txtmotachitiet);
-        btnThem = findViewById(R.id.btnthemvaogiohang);
-        spinner = findViewById(R.id.spinner);
+//        btnThem = findViewById(R.id.btnthemvaogiohang);
+//        spinner = findViewById(R.id.spinner);
         imgHinhAnh = findViewById(R.id.imgchitiet);
         toolbar = findViewById(R.id.toobar);
+
+        /*
         badge = findViewById(R.id.menu_sl);
         FrameLayout frameLayoutGioHang = findViewById(R.id.framegiohang);
 
@@ -153,11 +157,14 @@ public class ChiTietActivity extends AppCompatActivity {
             }
             badge.setText(String.valueOf(totalItem));
         }
+
+        */
     }
 
     @Override
     protected void onResume() {
         super.onResume();
+        /*
         if (Utils.manggiohang != null) {
             int totalItem = 0;
             for (int i = 0; i < Utils.manggiohang.size(); i++) {
@@ -165,5 +172,6 @@ public class ChiTietActivity extends AppCompatActivity {
             }
             badge.setText(String.valueOf(totalItem));
         }
+        */
     }
 }
